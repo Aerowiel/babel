@@ -1,5 +1,4 @@
-// API KEY = AIzaSyAK4NVqudf3OVwWSmQCHjk6ERC9S0XRF9o
-
+// API KEY = 
 var supportedLanguagesAndroid =
     ["af-ZA", "id-ID", "ms-MY", "ca-ES", "cs-CZ", "da-DK", "de-DE", "en-AU", "en-CA",
         "en-001", "en-IN", "en-IE", "en-NZ", "en-PH", "en-ZA", "en-GB", "en-US", "es-AR",
@@ -85,7 +84,7 @@ var app = {
     },
 
     translate: function () {
-        var url = "https://translation.googleapis.com/language/translate/v2?key=AIzaSyAK4NVqudf3OVwWSmQCHjk6ERC9S0XRF9o";
+        var url = "https://translation.googleapis.com/language/translate/v2?key=API_KEY";
         url += "&source=" + $("#fromLanguage").val();
         url += "&target=" + $("#toLanguage").val();
         url += "&q=" + escape($("#clickedMatch").val());
