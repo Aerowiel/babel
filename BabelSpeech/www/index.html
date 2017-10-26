@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+
+        
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <button id="startListening" style="background-color:black; color:antiquewhite;display:block;font-size:30px;">START LISTENING</button>
+            <select id="fromLanguage">
+                <option value="ZH">Chinese (Mandarin)</option>
+                <option value="CS">Czech</option>
+                <option value="DA">Danish</option>
+                <option value="NL">Dutch</option>
+                <option value="EN">English</option>
+                <option value="ET">Estonian</option>
+                <option value="FR" selected>French</option>
+                <option value="KA">Georgian</option>
+                <option value="DE">German</option>
+                <option value="HI">Hindi</option>
+                <option value="HU">Hungarian</option>
+                <option value="LA">Latin</option>
+                <option value="LV">Latvian</option>
+                <option value="LT">Lithuanian</option>
+                <option value="SR">Serbian</option>
+                <option value="CY">Welsh</option>
+                <option value="XH">Xhosa</option>
+            </select>
+
+            <select id="toLanguage">
+                <option value="ZH">Chinese (Mandarin)</option>
+                <option value="CS">Czech</option>
+                <option value="DA">Danish</option>
+                <option value="NL">Dutch</option>
+                <option value="EN" selected>English</option>
+                <option value="ET">Estonian</option>
+                <option value="FR">French</option>
+                <option value="KA">Georgian</option>
+                <option value="DE">German</option>
+                <option value="HI">Hindi</option>
+                <option value="HU">Hungarian</option>
+                <option value="LA">Latin</option>
+                <option value="LV">Latvian</option>
+                <option value="LT">Lithuanian</option>
+                <option value="SR">Serbian</option>
+                <option value="CY">Welsh</option>
+                <option value="XH">Xhosa</option>
+            </select>
+
+
+            <div id="isRecognitionAvailable"></div>
+            <div id="listeningStatus">listening status : Awaiting</div>
+
+            <div id="matches"></div>
+            <div id="clickedMatch"></div>
+
+            <button id="translate" style="background-color:black; color:antiquewhite;font-size:30px;">TRANSLATE</button>
+
+            <textarea id="translation"></textarea>
+
+            <button id="pronunce" style="background-color:black; color:antiquewhite;font-size:30px;">PRONUNCE IT</button>
+
+            <button id="clearValues" style="background-color:black; color:antiquewhite; display:block; font-size:30px;">CLEAR VALUES</button>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/lib/popper.min.js"></script>
+        <script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
+        <!--<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>-->
+        <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
