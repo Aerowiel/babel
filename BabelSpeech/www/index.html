@@ -1,77 +1,77 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <title>Babel-Fish </title>
+</head>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
+<body>
 
-        
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <button id="startListening" style="background-color:black; color:antiquewhite;display:block;font-size:30px;">START LISTENING</button>
-            <select id="fromLanguage">
-                <option value="ZH">Chinese (Mandarin)</option>
-                <option value="CS">Czech</option>
-                <option value="DA">Danish</option>
-                <option value="NL">Dutch</option>
-                <option value="EN">English</option>
-                <option value="ET">Estonian</option>
-                <option value="FR" selected>French</option>
-                <option value="KA">Georgian</option>
-                <option value="DE">German</option>
-                <option value="HI">Hindi</option>
-                <option value="HU">Hungarian</option>
-                <option value="LA">Latin</option>
-                <option value="LV">Latvian</option>
-                <option value="LT">Lithuanian</option>
-                <option value="SR">Serbian</option>
-                <option value="CY">Welsh</option>
-                <option value="XH">Xhosa</option>
-            </select>
+    <div class="container-fluid headerDesign">
+        <a href="index.html">Babel-Fish</a>
+    </div>
 
-            <select id="toLanguage">
-                <option value="ZH">Chinese (Mandarin)</option>
-                <option value="CS">Czech</option>
-                <option value="DA">Danish</option>
-                <option value="NL">Dutch</option>
-                <option value="EN" selected>English</option>
-                <option value="ET">Estonian</option>
-                <option value="FR">French</option>
-                <option value="KA">Georgian</option>
-                <option value="DE">German</option>
-                <option value="HI">Hindi</option>
-                <option value="HU">Hungarian</option>
-                <option value="LA">Latin</option>
-                <option value="LV">Latvian</option>
-                <option value="LT">Lithuanian</option>
-                <option value="SR">Serbian</option>
-                <option value="CY">Welsh</option>
-                <option value="XH">Xhosa</option>
-            </select>
+    <div class="loader">
+        <h1 style="text-align: center;">NO INTERNET</h1>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
+    <div class="container">
+        <div class="selectPack row">
 
-            <div id="isRecognitionAvailable"></div>
-            <div id="listeningStatus">listening status : Awaiting</div>
+            <select id="fromLanguage" class="col-md-5 selectLanguage"></select>
 
-            <div id="matches"></div>
-            <div id="clickedMatch"></div>
+            <h1 class="col-md-2 selectIndication"> TO </h1>
 
-            <button id="translate" style="background-color:black; color:antiquewhite;font-size:30px;">TRANSLATE</button>
+            <select id="toLanguage" class="col-md-5 selectLanguage"></select>
 
-            <textarea id="translation"></textarea>
+            <div class="switch white" id="switch">
+                <input type="radio" name="switch" id="switch-off" class="switchInput">
+                <input type="radio" name="switch" id="switch-on" class="switchInput" checked>
+                <label for="switch-off">Write</label>
+                <label for="switch-on">Speak</label>
+                <span class="toggle"></span>
+            </div>
 
-            <button id="pronunce" style="background-color:black; color:antiquewhite;font-size:30px;">PRONUNCE IT</button>
-
-            <button id="clearValues" style="background-color:black; color:antiquewhite; display:block; font-size:30px;">CLEAR VALUES</button>
         </div>
+
+        <div id="startListening" class="speech-control-container row packListen">
+
+            <div class="speech-control">
+                <div class="fa fa-microphone microphone-icon"></div>
+            </div>
+
+            <div class="speech-control-pulse"></div>
+
+            <svg x="0px" y="0px" class="speech-control-loader">
+                <circle class="circle" stroke-width="20" r="101" />
+            </svg>
+        </div>
+
+        <div id="startWriting" class="packWrite row" style="display: none;">
+            <textarea id="textToTranslate" class="col-md-12"></textarea>
+            <button id="translateButton" class="col-md-12">TRANSLATE</button>
+        </div>
+
+        <div id ="matches" class="buttonsResult row" style="display: none;">
+        </div>
+
+        <div class="translate row">
+            <button id="pronunce" class="speaker col-md-2 fa fa-volume-up fa-3x" aria-hidden="true"></button>
+            <p id ="translation" class="col-md-12">
+            </p>
+
+            <button id="clearValues" class="clearButton col-md-12">CLEAR</button>
+        </div>
+    </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/lib/popper.min.js"></script>
         <script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
-        <!--<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>-->
         <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>

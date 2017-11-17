@@ -1,34 +1,44 @@
-// API KEY = AIzaSyAK4NVqudf3OVwWSmQCHjk6ERC9S0XRF9o
-
+// API KEY = 
 var supportedLanguagesAndroid =
-    ["af-ZA", "id-ID", "ms-MY", "ca-ES", "cs-CZ", "da-DK", "de-DE", "en-AU", "en-CA",
-        "en-001", "en-IN", "en-IE", "en-NZ", "en-PH", "en-ZA", "en-GB", "en-US", "es-AR",
-        "es-BO", "es-CL", "es-CO", "es-CR", "es-EC", "es-US", "es-SV", "es-ES", "es-GT",
-        "es-HN", "es-MX", "es-NI", "es-PA", "es-PY", "es-PE", "es-PR", "es-DO", "es-UY",
-        "es-VE", "eu-ES", "fil-PH", "fr-FR", "gl-ES", "hr-HR", "zu-ZA", "is-IS", "it-IT",
-        "lt-LT", "hu-HU", "nl-NL", "nb-NO", "pl-PL", "pt-BR", "pt-PT", "ro-RO", "sl-SI",
-        "sk-SK", "fi-FI", "sv-SE", "vi-VN", "tr-TR", "el-GR", "bg-BG", "ru-RU", "sr-RS",
-        "uk-UA", "he-IL", "ar-IL", "ar-JO", "ar-AE", "ar-BH", "ar-DZ", "ar-SA", "ar-KW",
-        "ar-MA", "ar-TN", "ar-OM", "ar-PS", "ar-QA", "ar-LB", "ar-EG", "fa-IR", "hi-IN",
-        "th-TH", "ko-KR", "cmn-Hans-CN", "cmn-Hans-HK", "cmn-Hant-TW", "yue-Hant-HK",
-        "ja-JP"];
+{
+  'CS':'Czech', 'DA':'Danish','NL':'Dutch',
+  'EN':'English','FR':'French',
+  'DE':'German','HI':'Hindi','HU':'Hungarian'
+  ,'LT':'Lithuanian','SR':'Serbian',
+  'ES':'Spanish', 'JP':'Japanese'
+    };
 
+var languageCodes = ["cs-CZ", "da-DK", "nl-NL", "en-US", "fr-FR", "de-DE", "hi-IN", "hu-HU", "lt-LT", "sr-RS", "es-ES", "ja-JP"]
+
+
+
+for (var key in supportedLanguagesAndroid) {
+    if (supportedLanguagesAndroid.hasOwnProperty(key)) {
+        $("#fromLanguage").append("<option value=" + key + ">" + supportedLanguagesAndroid[key] + "</option>");
+        $("#toLanguage").append("<option value=" + key + ">" + supportedLanguagesAndroid[key] + "</option>");
+    }
+}
 
 var options = {
     language: "fr-FR", // {String} used language for recognition (default "en-US")
     matches: 1,        // {Number} number of return matches (default 5, on iOS: maximum number of matches)
-    prompt: "It's ok",        // {String} displayed prompt of listener popup window (default "", Android only)    
+    prompt: "",        // {String} displayed prompt of listener popup window (default "", Android only)    
     showPopup: false    //  {Boolean} display listener popup window with prompt (default true, Android only)
 };
 
+var currentState = 1;
+
 
 var app = {
-
+    
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
     onDeviceReady: function () {
+
+        document.addEventListener("offline", this.onOffline, false);
+        document.addEventListener("online", this.onOnline, false);
 
         // Check if speech recognition is available on device
         window.plugins.speechRecognition.isRecognitionAvailable(
@@ -39,12 +49,44 @@ var app = {
         $("#startListening").click(this.startListening.bind(this));
 
         // Add on click to translate button
-        $("#translate").click(this.translate);
+        $("#translateButton").click(this.translateFromText);
 
         // Add on click to clear values button
         $("#clearValues").click(this.clearValues);
 
         $("#pronunce").click(this.textToSpeech);
+
+        $("#switch").click(this.changeCurrentState);
+    },
+
+    onOffline: function () {
+        console.log("NO INTERNET");
+        
+        $(".packListen").css("display", "none");
+        $(".packWrite").css("display", "none");
+        $(".selectPack").css("display", "none");
+        $(".translate").css("display", "none"); 
+
+        $(".loader").css("display", "block");
+    },
+
+    onOnline: function () {
+        console.log("INTERNET");
+
+        $(".selectPack").css("display", "");
+        $(".translate").css("display", "");
+
+        $(".loader").css("display", "none");
+
+        if (currentState == 1) {
+            $(".packListen").css("display", "");
+        }
+        else {
+            $(".packWrite").css("display", "");
+        }
+            
+            
+
     },
 
     speechRecognitionSuccessCallback: function () {
@@ -56,7 +98,26 @@ var app = {
         //$("#isRecognitionAvailable").text("isRecognitionAvailable : NO");
     },
 
+    stopListeningAnimation: function() {
+        $('#startListening').removeClass('listen');
+        $('#startListening').addClass('loading').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+        function () 
+        {
+            $('#startListening').removeClass('loading');
+        });
+    },
+
+    setOptions: function() {
+        options.language = languageCodes[document.getElementById("fromLanguage").selectedIndex];
+        console.log(options.language);
+    },
+
     startListening: function () {
+
+        $('#startListening').addClass('listen');
+
+        this.setOptions();
+
         window.plugins.speechRecognition.startListening(
             this.startListeningSuccessCallback,
             this.startListeningErrorCallback,
@@ -67,43 +128,58 @@ var app = {
 
     startListeningSuccessCallback: function (matches) {
         $("#listeningStatus").text("Listening status : Success");
+
+        app.stopListeningAnimation();
+
         for (match in matches) {
-            $("#matches").append("<button class='matchButton' value=" + matches[match] + ">" + matches[match] + "</button>");
+            console.log(matches[match]);
+            $("#matches").append("<button class='resultRecord col-md-12 matchButton' value=" + matches[match] + ">" + matches[match] + "</button>");
         }
         $(".matchButton").click(app.onClickedMatchButton);
+
+        setTimeout(app.displayMatches, 2000);
         
     },
 
     startListeningErrorCallback: function (err) {
+        app.stopListeningAnimation();
         $("#listeningStatus").text("listeningStatus : Error");
         console.log(err);
     },
 
     onClickedMatchButton: function () {
-        $("#clickedMatch").html("Clicked : " + $(this).text());
-        $("#clickedMatch").val($(this).text());
+
+        app.translate($(this).text());
+
+        //Hide matches
+        app.hideMatches();
+
     },
 
-    translate: function () {
+    translateFromText: function () {
+        app.translate($("#textToTranslate").val());
+    },
+
+    translate: function (text) {
         var url = "https://translation.googleapis.com/language/translate/v2?key=AIzaSyAK4NVqudf3OVwWSmQCHjk6ERC9S0XRF9o";
         url += "&source=" + $("#fromLanguage").val();
         url += "&target=" + $("#toLanguage").val();
-        url += "&q=" + escape($("#clickedMatch").val());
+        url += "&q=" + escape(text);
         console.log(url);
         $.get(url, function (data, status) {
             console.log(data);
-            $("#translation").val(data.data.translations[0].translatedText);
+            $("#translation").html(data.data.translations[0].translatedText);
         });
     },
 
     clearValues: function () {
         $("#matches").html("");
-        $("#clickedMatch").html("");
-        $("#translation").val("");
+        $("#translation").html("");
+        $("#textToTranslate").val("");
     },
 
     textToSpeech: function () {
-        var textToSpeak = $("#translation").val();
+        var textToSpeak = $("#translation").html();
         console.log(textToSpeak);
         TTS
             .speak({
@@ -115,13 +191,44 @@ var app = {
             }, function (reason) {
                 console.log(reason);
             });
-    
-    }
+    },
+
+    changeCurrentState: function () {
+        app.clearValues();
+        if (currentState == 1) {
+            $('.packListen').css('display', 'none');
+            $('.packWrite').css('display', 'block');
+            currentState = 0;
+        }
+        else {
+            $('.packListen').css('display', 'block');
+            $('.packWrite').css('display', 'none');
+            currentState = 1;
+        }
+    },
+
+    displayMatches: function () {
+        $(".packListen").css("display", "none");
+        $(".packWrite").css("display", "none");
+        $(".selectPack").css("display", "none");
+        $(".translate").css("display", "none");
+
+        $(".buttonsResult").css("display", "block");
+    },
+
+    hideMatches: function () {
+        $(".packListen").css("display", "");
+        $(".speech-control-container").removeClass("loading");
+        $(".selectPack").css("display", "");
+        $(".translate").css("display", "");
+
+        $(".buttonsResult").css("display", "none");
+    },
 
     
 
 
-  
 };
 
 app.initialize();
+
